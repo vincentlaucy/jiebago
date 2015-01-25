@@ -48,12 +48,22 @@ func ExtractTags(sentence string, topK int) []string {
 		}
 	}
 	total := 0.0
+
+	fValues := make([]float64,len(freq))
 	for _, f := range freq {
 		total += f
+		fValues = append(fValues, f)
 	}
 	for k, v := range freq {
 		freq[k] = v / total
 	}
+
+	if medianIdf ==0 {
+		sort.Float64s(fValues)
+		medianIdf = fValues[len(fValues)/2]
+	}
+
+
 	tis := make(TfIdfs, 0)
 	for k, v := range freq {
 		var ti TfIdf
